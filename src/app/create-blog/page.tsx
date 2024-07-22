@@ -23,9 +23,9 @@ export default function CreateBlog() {
     };
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files) {
-            setBlogPost((prev) => ({ ...prev, coverPhoto: e.target.files[0] }));
-        }
+        // if (e.target.files) {
+        //     setBlogPost((prev) => ({ ...prev, coverPhoto: e.target.files[0] }));
+        // }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
