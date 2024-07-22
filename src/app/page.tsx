@@ -9,7 +9,7 @@ export default async function Home() {
   }
   
   return (
-    <div className="px-4">
+    <div className="px-4 min-h-screen">
       <div className="container flex items-center justify-center mt-8 mx-auto bg-zinc-800 rounded-xl py-10">
         <h1 className='text-center text-white'>Hii, {user?.firstName}</h1>
       </div>

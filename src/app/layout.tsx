@@ -4,6 +4,7 @@ import "./globals.css";
 import { ClerkProvider, RedirectToSignIn, RedirectToUserProfile, SignedIn, SignedOut } from "@clerk/nextjs";
 import Header from "@/components/header";
 import Dashboard from "./dashboard/page";
+import Footer from "@/components/footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,16 +19,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <body className={inter.className}>
+    <html lang="en">
+      <body className={inter.className}>
+        <ClerkProvider>
           <Header />
           {children}
-        </body>
-      </html>
-
-
-
-    </ClerkProvider>
+        </ClerkProvider>
+      </body>
+    </html>
   );
 }
