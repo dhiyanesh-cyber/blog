@@ -51,7 +51,7 @@ export default function MyBlog() {
     }
 
     if (loading) {
-        return <div className="text-center mt-10">Loading...</div>;
+        return <div className="text-center mt-10 min-h-svh">Loading...</div>;
     }
 
     return (
