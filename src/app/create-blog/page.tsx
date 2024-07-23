@@ -1,6 +1,10 @@
 'use client'
 
 import React, { useState } from 'react';
+import { storage } from '../../firebaseConfig'; // Adjust the import path
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+
+
 
 interface BlogPost {
     title: string;
@@ -23,56 +27,70 @@ export default function CreateBlog() {
     };
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        // if (e.target.files) {
-        //     setBlogPost((prev) => ({ ...prev, coverPhoto: e.target.files[0] }));
-        // }
+        const files = e.target.files; // Get the files property
+        if (files && files.length > 0) { // Check if files is not null and has at least one file
+            setBlogPost((prev) => ({ ...prev, coverPhoto: files[0] }));
+        } else {
+            // Optionally handle the case where no file is selected
+            setBlogPost((prev) => ({ ...prev, coverPhoto: null })); // Reset coverPhoto if no file is selected
+        }
     };
+    
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        
-
-        const formData = new FormData();
-        formData.append('title', blogPost.title);
-        formData.append('description', blogPost.description);
-        formData.append('content', blogPost.content);
-        if (blogPost.coverPhoto) {
-            formData.append('coverPhoto', blogPost.coverPhoto);
+        if (!blogPost.coverPhoto) {
+            console.error('No cover photo selected.');
+            return;
         }
 
         try {
+            // Upload image to Firebase
+            const imageRef = ref(storage, `blog-covers/${blogPost.coverPhoto.name}`);
+            await uploadBytes(imageRef, blogPost.coverPhoto);
+            const imageUrl = await getDownloadURL(imageRef);
+
+            // Prepare form data for the API
+            const formData = {
+                title: blogPost.title,
+                description: blogPost.description,
+                content: blogPost.content,
+                imageUrl: imageUrl,
+            };
+
+            console.log(JSON.stringify(formData));
+            
+
+            // Send blog data to your API
             const response = await fetch('/api/create-blog', {
                 method: 'POST',
-                body: formData,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
             });
 
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
 
-            // Handle success (e.g., show a success message, redirect, etc.)
+            // Handle success
             console.log('Blog published successfully!');
-            console.log(JSON.stringify(response.body));
-            
         } catch (error) {
-            // Handle error (e.g., show an error message)
             console.error('Error publishing blog:', error);
         }
     };
 
     return (
         <div className='flex items-center justify-center flex-col gap-10 p-5'>
-            <div className='container mx-auto border-0 shadow-lg rounded-xl max-w-md mt-10 p-6 ring-1 ring-inset ring-gray-300'>
+            <div className='container mx-auto border-0 ring-1 ring-inset ring-gray-300 shadow-lg rounded-xl max-w-md mt-10 p-6 '>
                 <form onSubmit={handleSubmit}>
-
                     <div className='flex flex-row items-center justify-between mb-5'>
                         <h3 className='font-semibold'>Create Your Blog</h3>
-                        <div className='align-middle select-none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none py-1 px-3 rounded-md bg-gradient-to-tr from-neutral-800 to-zinc-700 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 focus:shadow-none active:opacity-[0.85] active:shadow-none'>
-                            <button type='submit' className='font-sans text-sm font-medium text-white'>
-                                PUBLISH BLOG
-                            </button>
-                        </div>
+                        <button type='submit' className='font-sans text-sm font-medium text-white bg-gradient-to-tr from-neutral-800 to-zinc-700 py-1 px-3 rounded-md shadow-md'>
+                            PUBLISH BLOG
+                        </button>
                     </div>
 
                     {/* Title */}
@@ -145,7 +163,6 @@ export default function CreateBlog() {
                             </div>
                         </div>
                     </div>
-
                 </form>
             </div>
         </div>
