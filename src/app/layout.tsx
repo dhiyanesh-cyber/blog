@@ -24,6 +24,7 @@ export default function RootLayout({
         <ClerkProvider>
           <Header />
           {children}
+          <Footer />
         </ClerkProvider>
       </body>
     </html>

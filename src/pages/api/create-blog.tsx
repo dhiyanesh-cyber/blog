@@ -5,7 +5,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { userId } = getAuth(req); // Get user information from Clerk
+  const { userId } = getAuth(req); 
   const user = userId ? await clerkClient().users.getUser(userId) : null;
 
 
