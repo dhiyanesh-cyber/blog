@@ -29,9 +29,9 @@ const BlogPage: React.FC = () => {
         }
         
         const blogData: Blog = await response.json();
-        setBlog(blogData);
-      } catch (error) {
-        setError(error.message || 'An error occurred');
+        setBlog(blogData)
+      } catch (e: any) {
+        setError(e.message || 'An error occurred');
       } finally {
         setLoading(false);
       }
