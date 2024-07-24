@@ -1,11 +1,11 @@
-'use client';
-
+'use client'
 import { useAuth } from '@clerk/nextjs';
 import { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
+import Link from 'next/link';
 
 interface Blog {
-  id: string;
+  id: number;
   title: string;
   description: string;
   authorName: string;
@@ -14,15 +14,15 @@ interface Blog {
 }
 
 export default function Home() {
-  const { userId, isSignedIn } = useAuth(); // Call hooks at the top level
+  const { userId, isSignedIn } = useAuth();
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchBlogs = async () => {
       if (!userId) {
-        setLoading(false); // Set loading to false if userId is not available
-        return; // Early return if userId is not available
+        setLoading(false);
+        return;
       }
 
       try {
@@ -39,8 +39,8 @@ export default function Home() {
       }
     };
 
-    fetchBlogs(); // Call the function to fetch blogs
-  }, [userId]); // Dependency on userId
+    fetchBlogs();
+  }, [userId]);
 
   if (!isSignedIn) {
     return (
@@ -51,7 +51,7 @@ export default function Home() {
   }
 
   if (loading) {
-    return <div className="text-center mt-10 min-h-svh">Loading...</div>; // Optional loading state
+    return <div className="text-center mt-10 min-h-svh">Loading...</div>;
   }
 
   return (
@@ -59,18 +59,15 @@ export default function Home() {
       <div className="container mx-auto mt-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {blogs.map((blog) => (
-            <div key={blog.id} className="bg-zinc-800 rounded-xl p-4 shadow-md">
-              <h2 className="text-lg font-semibold text-white">{blog.title}</h2>
-              <p className="text-gray-400">{blog.description}</p>
-              {blog.imageUrl && (
-                <img src={blog.imageUrl} alt={blog.title} className="mt-2 mb-2 rounded-md" />
-              )}
-              {/* Render the content as Markdown */}
-              <ReactMarkdown className="text-gray-300">{blog.content}</ReactMarkdown>
-              <div className="mt-4">
-                <p className="text-sm text-gray-500">Author: {blog.authorName}</p>
+            <Link href={`/blog/${blog.id}`} key={blog.id} className="bg-zinc-800 rounded-xl p-4 shadow-md hover:shadow-lg transition-shadow duration-300">
+              <div>
+                {blog.imageUrl && (
+                  <img src={blog.imageUrl} alt={blog.title} className="mt-2 mb-2 rounded-md w-full h-48 object-cover" />
+                )}
+                <h2 className="text-lg font-semibold text-white">{blog.title}</h2>
+                <p className="text-gray-400">{blog.description}</p>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
