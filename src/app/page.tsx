@@ -2,8 +2,10 @@
 
 import { useAuth } from '@clerk/nextjs';
 import { useEffect, useState } from 'react';
+import Markdown from 'react-markdown';
 import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+
+
 
 interface Blog {
   id: string;
@@ -18,6 +20,9 @@ export default function Home() {
   const { userId, isSignedIn } = useAuth(); // Call hooks at the top level
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
+
+  
+
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -66,6 +71,8 @@ export default function Home() {
               {blog.imageUrl && (
                 <img src={blog.imageUrl} alt={blog.title} className="mt-2 mb-2 rounded-md" />
               )}
+
+              
               {/* Render the content as Markdown */}
               <ReactMarkdown className="text-gray-300">{blog.content}</ReactMarkdown>
               <div className="mt-4">

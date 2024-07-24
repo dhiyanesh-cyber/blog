@@ -83,7 +83,7 @@ export default function CreateBlog() {
     };
 
     return (
-        <div className='flex items-center justify-center flex-col gap-10 p-5'>
+        <div className='flex items-center justify-center flex-col gap-10 p-5 min-h-svh' >
             <div className='container mx-auto border-0 ring-1 ring-inset ring-gray-300 shadow-lg rounded-xl max-w-md mt-10 p-6 '>
                 <form onSubmit={handleSubmit}>
                     <div className='flex flex-row items-center justify-between mb-5'>
