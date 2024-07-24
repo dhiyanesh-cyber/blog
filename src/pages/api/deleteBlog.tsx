@@ -5,7 +5,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === 'GET') {
+  if (req.method === 'DELETE') {
     try {
       // Get the auth information from the request
       const id = parseInt(req.query.id as string, 10);
@@ -15,21 +15,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
 
       // Fetch blogs based on the user ID
-      const blog = await prisma.blog.findUnique({
+      const deletedBlog = await prisma.blog.delete({
         where: {
           id: id,
         },
       });
 
-      res.status(200).json(blog); // Send the filtered blogs as a JSON response
+      res.status(200).json({ message: 'Blog deleted successfully', deletedBlog }); // Send the filtered blogs as a JSON response
     } catch (error) {
-      console.error('Error fetching blogs:', error);
+      console.error('Error deleting blog:', error);
       res.status(500).json({ message: 'Internal Server Error' });
     } finally {
       await prisma.$disconnect(); // Ensure the Prisma client is disconnected
     }
   } else {
-    res.setHeader('Allow', ['GET']);
+    res.setHeader('Allow', ['DELETE']);
     res.status(405).json({ message: 'Method Not Allowed' });
   }
 }

@@ -3,7 +3,6 @@
 import { useAuth } from '@clerk/nextjs';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
-import ReactMarkdown from 'react-markdown';
 
 interface Blog {
     id: string;
@@ -41,6 +40,28 @@ export default function MyBlog() {
 
         fetchBlogs(); // Call the function to fetch blogs
     }, [userId]); // Dependency on userId
+
+
+    const handleDelete = async (id: any) => {
+        if (!userId) {
+            setLoading(false); // Set loading to false if no userId
+            return; // Early return if userId is not available
+        }
+        try {
+            const response = await fetch(`/api/deleteBlog?id=${id}`,{
+                method: 'DELETE'});
+            if (!response.ok) {
+                throw new Error('Failed to delete blog');
+            }
+        } catch (error) {
+            console.error('Error deleting blog:', error);
+        } finally {
+            setLoading(false);
+            location.reload();
+            alert("Blog Deleted Successfully");
+            
+        }
+    }
 
     if (!isSignedIn) {
         return (
@@ -82,6 +103,9 @@ export default function MyBlog() {
                                     </Link>
                                     
                                     <button
+                                        onClick={() => {
+                                            handleDelete(blog.id)
+                                        }}
                                         className="align-middle select-none font-sans font-normal text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-1.5 px-3 rounded-md bg-gradient-to-tr from-red-800 to-red-600 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 active:opacity-[0.85]"
                                         type="button">
                                         delete
