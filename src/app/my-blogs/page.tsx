@@ -69,21 +69,24 @@ export default function MyBlog() {
             <div className="container mx-auto mt-8">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {blogs.map((blog) => (
-                        <div key={blog.id} className="bg-zinc-800 rounded-xl p-4 shadow-md">
+                        <div key={blog.id} className="bg-zinc-800 h-fit rounded-xl p-4 shadow-md">
                             <div className='container flex justify-between items-start gap-3'>
                                 <h2 className="text-lg font-semibold text-white">{blog.title}</h2>
-                                <button
-                                    className="align-middle select-none font-sans font-normal text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-1.5 px-1.5 rounded-md bg-gradient-to-tr from-white to-neutral-400 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 active:opacity-[0.85]"
-                                    type="button">
-                                    <img className='w-6' src="/edit.png" alt="" />
-                                </button>
-                                <button
-                                    className="align-middle select-none font-sans font-normal text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-1.5 px-3 rounded-md bg-gradient-to-tr from-red-800 to-red-600 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 active:opacity-[0.85]"
-                                    type="button">
-                                    delete
-                                </button>
-
-
+                                <div className='container flex items-start justify-end gap-3'>
+                                    <Link href={`/edit-blog/${blog.id}`}>
+                                        <button
+                                            className="align-middle select-none font-sans font-normal text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-1.5 px-1.5 rounded-md bg-gradient-to-tr from-white to-neutral-400 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 active:opacity-[0.85]"
+                                            type="button">
+                                            <img className='w-4' src="/edit.png" alt="" />
+                                        </button>
+                                    </Link>
+                                    
+                                    <button
+                                        className="align-middle select-none font-sans font-normal text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-1.5 px-3 rounded-md bg-gradient-to-tr from-red-800 to-red-600 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 active:opacity-[0.85]"
+                                        type="button">
+                                        delete
+                                    </button>
+                                </div>
                             </div>
                             <p className="text-gray-400">{blog.description}</p>
                             {blog.imageUrl && (
