@@ -13,7 +13,7 @@ function MyApp({ Component, pageProps }: { Component: any; pageProps: any }) {
   const router = useRouter();
 
   return (
-    <ClerkProvider frontendApi={clerkFrontendApi}>
+    <ClerkProvider >
       {/* Redirect to sign-in if not authenticated */}
       <Header />
       <Component {...pageProps} />
