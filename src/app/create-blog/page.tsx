@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { storage } from '../../firebaseConfig'; // Adjust the import path
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { useRouter } from 'next/navigation';
 
 
 
@@ -14,6 +15,7 @@ interface BlogPost {
 }
 
 export default function CreateBlog() {
+    const router = useRouter();
     const [blogPost, setBlogPost] = useState<BlogPost>({
         title: '',
         description: '',
@@ -39,6 +41,11 @@ export default function CreateBlog() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (!blogPost.title || !blogPost.description || !blogPost.content || !blogPost.coverPhoto) {
+            alert('Please fill in all fields, including uploading a cover photo.');
+            return;
+          }
 
         if (!blogPost.coverPhoto) {
             console.error('No cover photo selected.');
@@ -77,14 +84,16 @@ export default function CreateBlog() {
 
             // Handle success
             console.log('Blog published successfully!');
+            router.push('/my-blogs');
+            alert("Blog Published Successfully")
         } catch (error) {
             console.error('Error publishing blog:', error);
         }
     };
 
     return (
-        <div className='flex items-center justify-center flex-col gap-10 p-5'>
-            <div className='container mx-auto border-0 ring-1 ring-inset ring-gray-300 shadow-lg rounded-xl max-w-md mt-10 p-6 '>
+        <div className='flex items-center justify-start flex-col gap-10 p-5 min-h-svh' >
+            <div className='container mx-auto border-0 ring-1 ring-inset ring-gray-300 shadow-lg rounded-xl max-w-md mt-6 p-6 '>
                 <form onSubmit={handleSubmit}>
                     <div className='flex flex-row items-center justify-between mb-5'>
                         <h3 className='font-semibold'>Create Your Blog</h3>
@@ -163,6 +172,19 @@ export default function CreateBlog() {
                             </div>
                         </div>
                     </div>
+
+                    {/* Display uploaded image preview */}
+                    {blogPost.coverPhoto && (
+                        <div className="mt-4">
+                            <p className="text-sm text-gray-600">Uploaded Image:</p>
+                            <img
+                                src={URL.createObjectURL(blogPost.coverPhoto)}
+                                alt="Uploaded"
+                                className="mt-2 max-w-xs rounded-md"
+                            />
+                        </div>
+                    )}
+
                 </form>
             </div>
         </div>
