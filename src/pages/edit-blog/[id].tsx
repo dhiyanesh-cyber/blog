@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useAuth } from '@clerk/nextjs';
 import { storage } from '../../firebaseConfig'; // Adjust the import path
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import Image from 'next/image';
 
 interface Blog {
     id: string;
@@ -186,7 +187,8 @@ const EditBlog = () => {
                     {coverPhoto && (
                         <div className="mt-4">
                             <p className="text-sm text-gray-600">Uploaded Image:</p>
-                            <img
+                            <Image
+                                width={20}
                                 src={URL.createObjectURL(coverPhoto)}
                                 alt="Uploaded"
                                 className="mt-2 max-w-xs rounded-md"
