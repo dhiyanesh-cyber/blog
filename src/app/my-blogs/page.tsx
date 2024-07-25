@@ -1,6 +1,7 @@
 'use client';
 
 import { useAuth } from '@clerk/nextjs';
+import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 
@@ -98,7 +99,7 @@ export default function MyBlog() {
                                         <button
                                             className="align-middle select-none font-sans font-normal text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-1.5 px-1.5 rounded-md bg-gradient-to-tr from-white to-neutral-400 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 active:opacity-[0.85]"
                                             type="button">
-                                            <img className='w-4' src="/edit.png" alt="" />
+                                            <Image width={500} height={500} className='w-4' src="/edit.png" alt="" />
                                         </button>
                                     </Link>
                                     
@@ -114,7 +115,7 @@ export default function MyBlog() {
                             </div>
                             <p className="text-gray-400">{blog.description}</p>
                             {blog.imageUrl && (
-                                <img src={blog.imageUrl} alt={blog.title} className="mt-2 mb-2 rounded-md" />
+                                <Image width={500} height={500} src={blog.imageUrl} alt={blog.title} className="mt-2 mb-2 rounded-md" />
                             )}
                         </div>
                     ))}

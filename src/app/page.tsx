@@ -2,6 +2,7 @@
 import { useAuth } from '@clerk/nextjs';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 
 
@@ -64,7 +65,7 @@ export default function Home() {
             <Link href={`/blog/${blog.id}`} key={blog.id} className="bg-zinc-800 h-fit rounded-xl p-4 shadow-md hover:shadow-lg transition-shadow duration-300">
               <div>
                 {blog.imageUrl && (
-                  <img src={blog.imageUrl} alt={blog.title} className="mt-2 mb-2 rounded-md w-full h-48 object-cover" />
+                  <Image width={500} height={500} src={blog.imageUrl} alt={blog.title} className="mt-2 mb-2 rounded-md w-full h-48 object-cover" />
                 )}
                 <h2 className="text-lg font-semibold text-white">{blog.title}</h2>
                 <p className="text-gray-400">{blog.description}</p>
