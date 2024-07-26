@@ -10,14 +10,24 @@ datasource db {
 }
 
 model Blog {
-  id          Int      @id @default(autoincrement())
-  title       String   @db.VarChar(255)
-  description String    @db.VarChar(255)
-  imageUrl    String?   @db.VarChar(255)
-  content     String?   @db.Text 
-  authorName  String    @db.VarChar(255)
-  authorId    String    @db.VarChar(255) 
+  id            Int      @id @default(autoincrement())
+  title         String   @db.VarChar(255)
+  description   String   @db.VarChar(255)
+  imageUrl      String?  @db.VarChar(255)
+  content       String?  @db.Text 
+  authorName    String   @db.VarChar(255)
+  authorId      String   @db.VarChar(255) 
+  likes         Int      @default(0)
+  likedBy       Likes[]
 }
 
+model Likes {
+  id          Int      @id @default(autoincrement())
+  blog        Blog     @relation(fields: [blogId], references: [id])
+  blogId      Int
+  userId      String   @db.VarChar(255)
+  
+  @@unique([blogId, userId])
+}
 
 

@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import ReactMarkdown from 'react-markdown';
+import { LikeButton } from '@/components/LikeButton';
 import Image from 'next/image';
+
 
 interface Blog {
   id: number;
@@ -10,6 +12,7 @@ interface Blog {
   authorName: string;
   imageUrl: string;
   content: string;
+  likes: number;
 }
 
 const BlogPage: React.FC = () => {
@@ -65,7 +68,11 @@ const BlogPage: React.FC = () => {
           <div className="text-gray-800">
             <ReactMarkdown>{blog.content}</ReactMarkdown>
           </div>
-          <p className="mt-8 text-sm text-gray-500">Author: {blog.authorName}</p>
+          <div className="mt-4">
+          <LikeButton initialLikes={blog.likes}/>
+            </div>
+         
+          <p className="mt-6 text-sm text-gray-500">Author: {blog.authorName}</p>
         </div>
       </div>
     </div>
