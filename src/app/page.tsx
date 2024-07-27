@@ -68,6 +68,7 @@ export default function Home() {
                   <Image width={500} height={500} src={blog.imageUrl} alt={blog.title} className="mt-2 mb-2 rounded-md w-full h-48 object-cover" />
                 )}
                 <h2 className="text-lg font-semibold text-white">{blog.title}</h2>
+                <h3 className="text-gray-400">By {blog.authorName}</h3>
                 <p className="text-gray-400">{blog.description}</p>
               </div>
             </Link>
