@@ -91,15 +91,15 @@ export default function MyBlog() {
             <div className="container mx-auto mt-8">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {blogs.map((blog) => (
-                        <div key={blog.id} className="bg-zinc-800 h-fit rounded-xl p-4 shadow-md">
+                        <div key={blog.id} className="bg-neutral-50 h-fit rounded-2xl p-4 ring-1 ring-stone-300 transition-shadow duration-200 hover:shadow-lg hover:shadow-neutral-400/50">
                             <div className='container flex justify-between items-start gap-3'>
-                                <h2 className="text-lg font-semibold text-white">{blog.title}</h2>
+                                <h2 className="font-semibold text-neutral-800 text-base">{blog.title}</h2>
                                 <div className='container flex items-start justify-end gap-3'>
                                     <Link href={`/edit-blog/${blog.id}`}>
                                         <button
-                                            className="align-middle select-none font-sans font-normal text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-1.5 px-1.5 rounded-md bg-gradient-to-tr from-white to-neutral-400 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 active:opacity-[0.85]"
+                                            className="align-middle select-none font-sans font-normal text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-1.5 px-1.5 rounded-md bg-gradient-to-tr from-neutral-900 to-neutral-700 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 active:opacity-[0.85]"
                                             type="button">
-                                            <Image width={500} height={500} className='w-4' src="/edit.png" alt="" />
+                                            <Image width={500} height={500} className='w-4' src="/edit-white.png" alt="" />
                                         </button>
                                     </Link>
                                     
@@ -113,7 +113,7 @@ export default function MyBlog() {
                                     </button>
                                 </div>
                             </div>
-                            <p className="text-gray-400">{blog.description}</p>
+                            <p className="text-neutral-600 text-sm">{blog.description}</p>
                             {blog.imageUrl && (
                                 <Image width={500} height={500} src={blog.imageUrl} alt={blog.title} className="mt-2 mb-2 rounded-md" />
                             )}

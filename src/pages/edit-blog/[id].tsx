@@ -100,11 +100,11 @@ const EditBlog = () => {
     if (hasPermission === false) return <div className="text-red-500 text-center min-h-svh">You do not have permission to edit this blog.</div>;
 
     return (
-        <div className='flex items-center justify-start flex-col gap-10 p-5 min-h-svh'>
+        <div className='flex font-sans items-center justify-start flex-col gap-10 p-5 min-h-svh'>
             <div className='container mx-auto border-0 ring-1 ring-inset ring-gray-300 shadow-lg rounded-xl mt-10 max-w-md p-6'>
                 <form onSubmit={handleUpdate} className="space-y-4">
                     <div className='flex flex-row items-center justify-between mb-5'>
-                        <h3 className='font-semibold'>Edit Blog</h3>
+                        <h3 className=' font-sans font-semibold'>Edit Blog</h3>
                         <button type='submit' className='font-sans text-sm font-medium text-white bg-gradient-to-tr from-neutral-800 to-zinc-700 py-1 px-3 rounded-md shadow-md'>
                             UPDATE BLOG
                         </button>
@@ -119,7 +119,7 @@ const EditBlog = () => {
                                 value={blog?.title}
                                 onChange={(e) => setBlog((prev) => prev ? { ...prev, title: e.target.value } : null)}
                                 required
-                                className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                className="block w-full rounded-md border-0 p-1.5 text-gray-600 font-normal shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
                         </div>
                     </div>
@@ -133,7 +133,7 @@ const EditBlog = () => {
                                 value={blog?.description}
                                 onChange={(e) => setBlog((prev) => prev ? { ...prev, description: e.target.value } : null)}
                                 required
-                                className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                className="block w-full rounded-md border-0 p-1.5 text-gray-600 font-normal shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
                         </div>
                     </div>
@@ -147,7 +147,7 @@ const EditBlog = () => {
                                 rows={3}
                                 onChange={(e) => setBlog((prev) => prev ? { ...prev, content: e.target.value } : null)}
                                 required
-                                className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                className="block w-full rounded-md border-0 p-1.5 text-gray-600 font-normal shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
                         </div>
                     </div>

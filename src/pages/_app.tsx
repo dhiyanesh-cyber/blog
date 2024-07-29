@@ -7,14 +7,13 @@ import "../app/globals.css";
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 
-const clerkFrontendApi = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY; // Your Clerk frontend API
+const clerkFrontendApi = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
 function MyApp({ Component, pageProps }: { Component: any; pageProps: any }) {
   const router = useRouter();
 
   return (
     <ClerkProvider >
-      {/* Redirect to sign-in if not authenticated */}
       <Header />
       <Component {...pageProps} />
       <Footer />
