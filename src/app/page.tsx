@@ -20,7 +20,7 @@ export default function Home() {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
 
-  
+
   useEffect(() => {
     const fetchBlogs = async () => {
       if (!userId) {
@@ -62,14 +62,25 @@ export default function Home() {
       <div className="container mx-auto mt-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {blogs.map((blog) => (
-            <Link href={`/blog/${blog.id}`} key={blog.id} className="bg-zinc-800 h-fit rounded-xl p-4 shadow-md hover:shadow-lg transition-shadow duration-300">
+            <Link
+              href={`/blog/${blog.id}`}
+              key={blog.id}
+              className="bg-neutral-50 h-fit rounded-2xl ring-1 ring-stone-300 transition-shadow duration-300 hover:shadow-lg hover:shadow-neutral-400/50"          >
               <div>
                 {blog.imageUrl && (
-                  <Image width={500} height={500} src={blog.imageUrl} alt={blog.title} className="mt-2 mb-2 rounded-md w-full h-48 object-cover" />
+                  <Image
+                    width={500}
+                    height={500}
+                    src={blog.imageUrl}
+                    alt={blog.title}
+                    className="rounded-t-2xl  w-full h-48 object-cover"
+                  />
                 )}
-                <h2 className="text-lg font-semibold text-white">{blog.title}</h2>
-                <h3 className="text-gray-400">By {blog.authorName}</h3>
-                <p className="text-gray-400">{blog.description}</p>
+                <div className='px-3 py-3'>
+                  <h2 className="font-semibold text-neutral-800 text-base ">{blog.title}</h2>
+                  <h3 className="text-neutral-600 text-sm">By {blog.authorName}</h3>
+                  {/* <p className="text-neutral-600 text-sm">{blog.description}</p> */}
+                </div>
               </div>
             </Link>
           ))}
