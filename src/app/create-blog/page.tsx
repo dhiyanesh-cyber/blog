@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { storage } from '../../firebaseConfig'; // Adjust the import path
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useRouter } from 'next/navigation';
+import Modal from '@/components/Modal';
 
 
 
@@ -16,12 +17,17 @@ interface BlogPost {
 
 export default function CreateBlog() {
     const router = useRouter();
+    const [loading,setLoading] = useState(false);
     const [blogPost, setBlogPost] = useState<BlogPost>({
         title: '',
         description: '',
         content: '',
         coverPhoto: null,
     });
+
+    const CloseModal = () => {
+        setLoading(false);
+    }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -40,6 +46,7 @@ export default function CreateBlog() {
     
 
     const handleSubmit = async (e: React.FormEvent) => {
+        
         e.preventDefault();
 
         if (!blogPost.title || !blogPost.description || !blogPost.content || !blogPost.coverPhoto) {
@@ -51,6 +58,8 @@ export default function CreateBlog() {
             console.error('No cover photo selected.');
             return;
         }
+
+        setLoading(true);
 
         try {
             // Upload image to Firebase
@@ -85,9 +94,11 @@ export default function CreateBlog() {
             // Handle success
             console.log('Blog published successfully!');
             router.push('/my-blogs');
-            alert("Blog Published Successfully")
+            // alert("Blog Published Successfully");
+            setLoading(false);
         } catch (error) {
             console.error('Error publishing blog:', error);
+            setLoading(false);
         }
     };
 
@@ -187,6 +198,12 @@ export default function CreateBlog() {
 
                 </form>
             </div>
+
+            <Modal show={loading}>
+                
+                <span className="loading loading-infinity loading-lg"></span>       
+            
+            </Modal>
         </div>
     );
 }
