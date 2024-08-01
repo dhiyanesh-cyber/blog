@@ -5,6 +5,8 @@ import { storage } from '../../firebaseConfig'; // Adjust the import path
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useRouter } from 'next/navigation';
 import Modal from '@/components/Modal';
+import Image from 'next/image';
+
 
 
 
@@ -188,7 +190,7 @@ export default function CreateBlog() {
                     {blogPost.coverPhoto && (
                         <div className="mt-4">
                             <p className="text-sm text-gray-600">Uploaded Image:</p>
-                            <img
+                            <Image
                                 src={URL.createObjectURL(blogPost.coverPhoto)}
                                 alt="Uploaded"
                                 className="mt-2 max-w-xs rounded-md"
