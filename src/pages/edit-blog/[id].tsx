@@ -5,6 +5,7 @@ import { useAuth } from '@clerk/nextjs';
 import { storage } from '../../firebaseConfig'; // Adjust the import path
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import Image from 'next/image';
+import Modal from '@/components/Modal';
 
 interface Blog {
     id: string;
@@ -24,7 +25,7 @@ const EditBlog = () => {
     const [loading, setLoading] = useState(true);
     const [hasPermission, setHasPermission] = useState<boolean | null>(null);
     const [error, setError] = useState('');
-    const [coverPhoto, setCoverPhoto] = useState<File | null>(null); // State for the uploaded file
+    const [coverPhoto, setCoverPhoto] = useState<File | null>(null);
 
     useEffect(() => {
         if (id) {
@@ -63,16 +64,16 @@ const EditBlog = () => {
         if (!blog) return;
 
         try {
-            let imageUrl = blog.imageUrl; // Default to the existing image URL
+            let imageUrl = blog.imageUrl; 
 
-            // Upload image if a new file is selected
+           
             if (coverPhoto) {
                 const imageRef = ref(storage, `blog-covers/${coverPhoto.name}`);
                 await uploadBytes(imageRef, coverPhoto);
-                imageUrl = await getDownloadURL(imageRef); // Get the new image URL
+                imageUrl = await getDownloadURL(imageRef); 
             }
 
-            // Prepare updated blog data
+           
             const updatedBlog = { ...blog, imageUrl };
 
             const response = await fetch(`/api/updateBlog`, {
@@ -87,17 +88,25 @@ const EditBlog = () => {
                 throw new Error('Failed to update blog');
             }
 
-            // Redirect to the blog page or show a success message
-            router.push('/my-blogs'); // Adjust the redirect as needed
+          
+            router.push('/my-blogs');
         } catch (error) {
             console.error('Error updating blog:', error);
             setError('Failed to update blog');
         }
     };
 
-    if (loading || hasPermission === null) return <div className="text-center min-h-svh">Loading...</div>;
+    if (loading || hasPermission === null) {
+        return (
+            <Modal show={loading}>
+
+                <span className="loading loading-infinity loading-lg"></span>
+
+            </Modal>
+        );
+    }
     if (error) return <div className="text-red-500 text-center min-h-svh">{error}</div>;
-    if (hasPermission === false) return <div className="text-red-500 text-center min-h-svh">You do not have permission to edit this blog.</div>;
+    if (!hasPermission) return <div className="text-red-500 text-center min-h-svh"></div>;
 
     return (
         <div className='flex font-sans items-center justify-start flex-col gap-10 p-5 min-h-svh'>

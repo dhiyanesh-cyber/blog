@@ -1,5 +1,6 @@
 'use client';
 
+import Modal from '@/components/Modal';
 import { useAuth } from '@clerk/nextjs';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -18,13 +19,10 @@ export default function MyBlog() {
     const { userId, isSignedIn } = useAuth(); // Call hooks at the top level
     const [blogs, setBlogs] = useState<Blog[]>([]);
     const [loading, setLoading] = useState(true);
+    const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
         const fetchBlogs = async () => {
-            if (!userId) {
-                setLoading(false); // Set loading to false if no userId
-                return; // Early return if userId is not available
-            }
             try {
                 const response = await fetch(`/api/getUserBlog?userId=${userId}`);
                 if (!response.ok) {
@@ -39,18 +37,18 @@ export default function MyBlog() {
             }
         };
 
-        fetchBlogs(); // Call the function to fetch blogs
-    }, [userId]); // Dependency on userId
+        fetchBlogs();
+    }, [userId]);
 
 
     const handleDelete = async (id: any) => {
-        if (!userId) {
-            setLoading(false); // Set loading to false if no userId
-            return; // Early return if userId is not available
-        }
+
         try {
-            const response = await fetch(`/api/deleteBlog?id=${id}`,{
-                method: 'DELETE'});
+            setShowModal(true)
+            setLoading(true)
+            const response = await fetch(`/api/deleteBlog?id=${id}`, {
+                method: 'DELETE'
+            });
             if (!response.ok) {
                 throw new Error('Failed to delete blog');
             }
@@ -58,22 +56,21 @@ export default function MyBlog() {
             console.error('Error deleting blog:', error);
         } finally {
             setLoading(false);
-            location.reload();
-            alert("Blog Deleted Successfully");
-            
         }
     }
 
-    if (!isSignedIn) {
-        return (
-            <div>
-                <h1 className='text-center mt-10'>You are not logged in</h1>
-            </div>
-        );
-    }
+
+
+
 
     if (loading) {
-        return <div className="text-center mt-10 min-h-svh">Loading...</div>;
+        return (
+            <Modal show={loading}>
+
+                <span className="loading loading-infinity loading-lg"></span>
+
+            </Modal>
+        );
     }
 
     return (
@@ -102,7 +99,7 @@ export default function MyBlog() {
                                             <Image width={500} height={500} className='w-4' src="/edit-white.png" alt="" />
                                         </button>
                                     </Link>
-                                    
+
                                     <button
                                         onClick={() => {
                                             handleDelete(blog.id)
@@ -121,6 +118,15 @@ export default function MyBlog() {
                     ))}
                 </div>
             </div>
+            <dialog id="my_modal_3" className={showModal ? "modal modal-open" : "modal"}>
+                <div className="modal-box">
+                    <form method="dialog">
+                        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onClick={() => { setShowModal(!showModal); location.reload(); }}>✕</button>
+                    </form>
+                    <h3 className="font-bold text-lg">Hello!</h3>
+                    <p className="py-4">Press ESC key or click on ✕ button to close</p>
+                </div>
+            </dialog>
         </div>
     );
 }

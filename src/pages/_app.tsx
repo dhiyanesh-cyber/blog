@@ -13,11 +13,15 @@ function MyApp({ Component, pageProps }: { Component: any; pageProps: any }) {
   const router = useRouter();
 
   return (
-    <ClerkProvider >
-      <Header />
-      <Component {...pageProps} />
-      <Footer />
-    </ClerkProvider>
+    <div className={`flex flex-col min-h-svh`}>
+      <ClerkProvider >
+        <Header />
+        <div className='flex-grow'>
+          <Component {...pageProps} />
+        </div>
+        <Footer />
+      </ClerkProvider>
+    </div>
   );
 }
 

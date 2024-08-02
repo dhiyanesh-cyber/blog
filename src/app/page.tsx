@@ -3,6 +3,7 @@ import { useAuth } from '@clerk/nextjs';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import Modal from '@/components/Modal';
 
 
 
@@ -23,10 +24,7 @@ export default function Home() {
 
   useEffect(() => {
     const fetchBlogs = async () => {
-      if (!userId) {
-        setLoading(false);
-        return;
-      }
+
 
       try {
         const response = await fetch('/api/getBlogs');
@@ -45,16 +43,16 @@ export default function Home() {
     fetchBlogs();
   }, [userId]);
 
-  if (!isSignedIn) {
-    return (
-      <div>
-        <h1 className='text-center mt-10 min-h-svh'>You are not logged in</h1>
-      </div>
-    );
-  }
+
 
   if (loading) {
-    return <div className="text-center mt-10 min-h-svh">Loading...</div>;
+    return (
+      <Modal show={loading}>
+
+        <span className="loading loading-infinity loading-lg"></span>
+
+      </Modal>
+    );
   }
 
   return (
@@ -79,7 +77,6 @@ export default function Home() {
                 <div className='px-3 py-3'>
                   <h2 className="font-semibold text-neutral-800 text-base ">{blog.title}</h2>
                   <h3 className="text-neutral-600 text-sm">By {blog.authorName}</h3>
-                  {/* <p className="text-neutral-600 text-sm">{blog.description}</p> */}
                 </div>
               </div>
             </Link>
