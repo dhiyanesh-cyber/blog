@@ -19,7 +19,7 @@ interface BlogPost {
 
 export default function CreateBlog() {
     const router = useRouter();
-    const [loading,setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [blogPost, setBlogPost] = useState<BlogPost>({
         title: '',
         description: '',
@@ -45,16 +45,16 @@ export default function CreateBlog() {
             setBlogPost((prev) => ({ ...prev, coverPhoto: null })); // Reset coverPhoto if no file is selected
         }
     };
-    
+
 
     const handleSubmit = async (e: React.FormEvent) => {
-        
+
         e.preventDefault();
 
         if (!blogPost.title || !blogPost.description || !blogPost.content || !blogPost.coverPhoto) {
             alert('Please fill in all fields, including uploading a cover photo.');
             return;
-          }
+        }
 
         if (!blogPost.coverPhoto) {
             console.error('No cover photo selected.');
@@ -78,7 +78,7 @@ export default function CreateBlog() {
             };
 
             console.log(JSON.stringify(formData));
-            
+
 
             // Send blog data to your API
             const response = await fetch('/api/create-blog', {
@@ -191,6 +191,8 @@ export default function CreateBlog() {
                         <div className="mt-4">
                             <p className="text-sm text-gray-600">Uploaded Image:</p>
                             <Image
+                                width={500}
+                                height={400}
                                 src={URL.createObjectURL(blogPost.coverPhoto)}
                                 alt="Uploaded"
                                 className="mt-2 max-w-xs rounded-md"
@@ -202,9 +204,9 @@ export default function CreateBlog() {
             </div>
 
             <Modal show={loading}>
-                
-                <span className="loading loading-infinity loading-lg"></span>       
-            
+
+                <span className="loading loading-infinity loading-lg"></span>
+
             </Modal>
         </div>
     );

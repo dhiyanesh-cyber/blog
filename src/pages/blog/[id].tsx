@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import ReactMarkdown from 'react-markdown';
 import { LikeButton } from '@/components/LikeButton';
 import Image from 'next/image';
+import Modal from '@/components/Modal';
 
 
 interface Blog {
@@ -31,7 +32,7 @@ const BlogPage: React.FC = () => {
         if (!response.ok) {
           throw new Error('Failed to fetch blog');
         }
-        
+
         const blogData: Blog = await response.json();
         setBlog(blogData)
       } catch (e: any) {
@@ -45,7 +46,13 @@ const BlogPage: React.FC = () => {
   }, [id]); // Dependency on the ID parameter
 
   if (loading) {
-    return <div className="text-center mt-10 min-h-screen flex items-center justify-center text-xl text-gray-500">Loading...</div>;
+    return (
+      <Modal show={loading}>
+
+        <span className="loading loading-infinity loading-lg"></span>
+
+      </Modal>
+    );
   }
 
   if (error) {
@@ -69,9 +76,9 @@ const BlogPage: React.FC = () => {
             <ReactMarkdown>{blog.content}</ReactMarkdown>
           </div>
           <div className="mt-4">
-          <LikeButton initialLikes={blog.likes}/>
-            </div>
-         
+            <LikeButton initialLikes={blog.likes} />
+          </div>
+
           <p className="mt-6 text-sm text-gray-500">Author: {blog.authorName}</p>
         </div>
       </div>
