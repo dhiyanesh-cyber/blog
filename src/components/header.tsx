@@ -4,19 +4,26 @@ import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import SearchBar from "./searchBar";
 import { useSearch } from "../context/SearchContext";
+import { useParams, usePathname } from "next/navigation";
 
 
 
 export default function Header() {
 
+    const params = usePathname();
+
+
     const { setSearchTerm } = useSearch();
     return (
-        <div className="bg-zinc-900 font-sans text-neutral-100 px-3">
-            <div className="container mx-auto flex items-center justify-between py-4 ">
+        <div className="bg-zinc-900 font-sans text-neutral-100 px-3 ">
+            <div className="container mx-auto flex items-center justify-between py-4 h-20">
                 <Link className="font-bold " href='/'>Blogzpot</Link>
-                <div className="hidden sm:block">
-                    <SearchBar width="w-96" bg="zinc-800" onSearch={setSearchTerm} />
-                </div>
+                {params === "/" &&
+                    <div className="hidden sm:block">
+                        <SearchBar width="w-96" bg="bg-zinc-800" onSearch={setSearchTerm} />
+                    </div>
+                }
+
                 <div>
                     <div className="flex gap-5" >
                         <SignedOut>

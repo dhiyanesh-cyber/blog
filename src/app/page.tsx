@@ -45,7 +45,8 @@ export default function Home() {
   const filteredBlogs = blogs.filter(blog =>
     blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     blog.authorName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    blog.description.toLowerCase().includes(searchTerm.toLowerCase())
+    blog.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    blog.content.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   if (loading) {
@@ -59,7 +60,7 @@ export default function Home() {
   return (
     <div className="px-4 min-h-svh">
       <div className="block mt-8 sm:hidden">
-        <SearchBar width="w-full" bg="neutral-100" onSearch={setSearchTerm} />
+        <SearchBar width="w-full" bg="bg-neutral-100" onSearch={setSearchTerm} />
       </div>
       <div className="container mx-auto mt-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">

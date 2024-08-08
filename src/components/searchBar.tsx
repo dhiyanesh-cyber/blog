@@ -1,3 +1,4 @@
+import { useRouter } from 'next/navigation';
 import React, { useState, ChangeEvent } from 'react'
 
 interface SearchBarProps {
@@ -7,14 +8,16 @@ interface SearchBarProps {
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({ onSearch, bg, width }) => {
+    const router = useRouter();
 
     const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+        router.push('/')
         const value = e.target.value;
         onSearch(value);
     };
 
     return (
-        <label className={`input input-bordered flex items-center gap-2 ${width} bg-${bg}`}>
+        <label className={`input input-bordered flex items-center gap-2 ${width} ${bg}`}>
             <input
                 type="text"
                 className="grow"
