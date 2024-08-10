@@ -64,13 +64,13 @@ const BlogPage: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto mt-8 px-32 min-h-screen font-sans">
+    <div className="container mx-auto mt-8 px-4 lg:px-32 min-h-screen">
       <div className="bg-white rounded-lg shadow-lg overflow-hidden">
         {blog.imageUrl && (
           <Image width={500} height={700} src={blog.imageUrl} alt={blog.title} className="w-full  object-fit rounded-t-lg" />
         )}
         <div className="p-6">
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">{blog.title}</h1>
+          <h1 className="text-2xl lg:4xl font-bold text-gray-800 mb-4">{blog.title}</h1>
           <p className="text-gray-600 mb-6">{blog.description}</p>
           <div className="text-gray-800">
             <ReactMarkdown>{blog.content}</ReactMarkdown>

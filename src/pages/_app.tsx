@@ -1,10 +1,8 @@
 // pages/_app.tsx
 import { ClerkProvider, RedirectToSignIn } from '@clerk/nextjs';
 import { useRouter } from 'next/router';
-import { ReactNode } from 'react';
-import { Inter } from "next/font/google";
-import "../app/globals.css";
-import Header from '@/components/header';
+import "./_app.css"
+import Header from '@/components/header/header';
 import Footer from '@/components/footer';
 import { SearchProvider } from '@/context/SearchContext';
 
@@ -18,8 +16,8 @@ function MyApp({ Component, pageProps }: { Component: any; pageProps: any }) {
       <ClerkProvider >
         <SearchProvider>
           <Header />
-          <div className='flex-grow'>
-            <Component {...pageProps} />
+          <div className='flex-grow nunito'>
+            <Component {...pageProps}/>
           </div>
           <Footer />
         </SearchProvider>

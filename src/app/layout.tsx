@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
-import Header from "@/components/header";
+import Header from "@/components/header/header";
 import Footer from "@/components/footer";
 import { SearchProvider } from "../context/SearchContext";
 
@@ -24,7 +24,7 @@ export default function RootLayout({
         <ClerkProvider>
           <SearchProvider>
             <Header />
-            <main className="flex-grow">
+            <main className="flex-grow nunito">
               {children}
             </main>
             <Footer />
