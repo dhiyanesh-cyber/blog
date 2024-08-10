@@ -64,10 +64,10 @@ const BlogPage: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto mt-8 px-4 min-h-screen font-sans">
+    <div className="container mx-auto mt-8 px-32 min-h-screen font-sans">
       <div className="bg-white rounded-lg shadow-lg overflow-hidden">
         {blog.imageUrl && (
-          <Image width={500} height={700} src={blog.imageUrl} alt={blog.title} className="w-full h-64 object-cover rounded-t-lg" />
+          <Image width={500} height={700} src={blog.imageUrl} alt={blog.title} className="w-full  object-fit rounded-t-lg" />
         )}
         <div className="p-6">
           <h1 className="text-4xl font-bold text-gray-800 mb-4">{blog.title}</h1>

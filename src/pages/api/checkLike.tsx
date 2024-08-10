@@ -1,4 +1,3 @@
-// pages/api/checkLike.ts
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getAuth } from '@clerk/nextjs/server';
 import { PrismaClient } from '@prisma/client';
