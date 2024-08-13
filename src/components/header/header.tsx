@@ -16,9 +16,9 @@ export default function Header() {
 
     const { setSearchTerm } = useSearch();
     return (
-        <div className="bg-zinc-900 font-sans text-neutral-100 px-3">
+        <div className="bg-zinc-900 font-sans text-neutral-100 px-3 nunito">
             <div className="container mx-auto flex items-center justify-between py-4 h-20">
-                <Link className="font-bold nunito" href='/'>Blogzpot</Link>
+                <Link className="font-bold " href='/'>Blogzpot</Link>
                 {params === "/" &&
                     <div className="hidden sm:block">
                         <SearchBar width="w-96" bg="bg-zinc-800" onSearch={setSearchTerm} />
@@ -28,7 +28,7 @@ export default function Header() {
                 <div>
                     <div className="flex gap-5" >
                         <SignedOut>
-                            <Link href='/sign-in' className="whitespace-nowrap">Sign In</Link>
+                            <Link href='/sign-in' className="whitespace-nowrap ">Sign In</Link>
                         </SignedOut>
 
                         <div className="container flex justify-center items-center gap-7">
