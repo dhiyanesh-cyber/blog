@@ -23,7 +23,7 @@ model Blog {
 
 model Likes {
   id          Int      @id @default(autoincrement())
-  blog        Blog     @relation(fields: [blogId], references: [id])
+  blog        Blog     @relation(fields: [blogId], references: [id], onDelete: Cascade)
   blogId      Int
   userId      String   @db.VarChar(255)
   

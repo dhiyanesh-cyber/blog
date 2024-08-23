@@ -1,34 +1,46 @@
-// pages/api/blogs.ts
 import { NextApiRequest, NextApiResponse } from 'next';
 import { PrismaClient } from '@prisma/client';
 
+// Initialize Prisma client
 const prisma = new PrismaClient();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  // Check if the request method is DELETE
   if (req.method === 'DELETE') {
     try {
-      // Get the auth information from the request
+      // Parse the blog ID from the query parameters
       const id = parseInt(req.query.id as string, 10);
 
+      // Validate the blog ID
       if (!id) {
-        return res.status(401).json({ message: 'Unauthorized' });
+        return res.status(400).json({ message: 'Invalid blog ID' });
       }
 
-      // Fetch blogs based on the user ID
-      const deletedBlog = await prisma.blog.delete({
-        where: {
-          id: id,
-        },
+      // Use a transaction to ensure all operations are performed atomically
+      const deletedBlog = await prisma.$transaction(async (tx) => {
+        // Step 1: Delete related likes
+        await tx.likes.deleteMany({
+          where: { blogId: id },
+        });
+
+        // Step 2: Delete the blog
+        return tx.blog.delete({
+          where: { id: id },
+        });
       });
 
-      res.status(200).json({ message: 'Blog deleted successfully', deletedBlog }); // Send the filtered blogs as a JSON response
+      // Send a success response
+      res.status(200).json({ message: 'Blog deleted successfully', deletedBlog });
     } catch (error) {
+      // Log and handle any errors
       console.error('Error deleting blog:', error);
       res.status(500).json({ message: 'Internal Server Error' });
     } finally {
-      await prisma.$disconnect(); // Ensure the Prisma client is disconnected
+      // Ensure the Prisma client is disconnected
+      await prisma.$disconnect();
     }
   } else {
+    // Handle unsupported HTTP methods
     res.setHeader('Allow', ['DELETE']);
     res.status(405).json({ message: 'Method Not Allowed' });
   }
