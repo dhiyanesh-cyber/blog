@@ -44,11 +44,16 @@ export default function MyBlog() {
     const handleDelete = async (id: any) => {
 
         try {
-            setShowModal(true)
             setLoading(true)
+
+            await fetch(`/api/deleteLikesByBlogId?blogId=${id}`, {
+                method: 'DELETE'
+            });
+
             const response = await fetch(`/api/deleteBlog?id=${id}`, {
                 method: 'DELETE'
             });
+
             if (!response.ok) {
                 throw new Error('Failed to delete blog');
             }
@@ -56,6 +61,7 @@ export default function MyBlog() {
             console.error('Error deleting blog:', error);
         } finally {
             setLoading(false);
+            setShowModal(true)
         }
     }
 
@@ -123,8 +129,8 @@ export default function MyBlog() {
                     <form method="dialog">
                         <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onClick={() => { setShowModal(!showModal); location.reload(); }}>✕</button>
                     </form>
-                    <h3 className="font-bold text-lg">Hello!</h3>
-                    <p className="py-4">Press ESC key or click on ✕ button to close</p>
+                    <h3 className="font-bold text-lg"></h3>
+                    <p className="py-4">Blog deleted successfully</p>
                 </div>
             </dialog>
         </div>
