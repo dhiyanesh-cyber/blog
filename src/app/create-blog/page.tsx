@@ -195,10 +195,11 @@ export default function CreateBlog() {
                                 height={400}
                                 src={URL.createObjectURL(blogPost.coverPhoto)}
                                 alt="Uploaded"
-                                className="mt-2 max-w-xs rounded-md"
+                                className="mt-2 w-full max-w-xs sm:max-w-xs rounded-md object-cover"
                             />
                         </div>
                     )}
+
 
                 </form>
             </div>
