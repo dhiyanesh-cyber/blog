@@ -64,16 +64,16 @@ const EditBlog = () => {
         if (!blog) return;
 
         try {
-            let imageUrl = blog.imageUrl; 
+            let imageUrl = blog.imageUrl;
 
-           
+
             if (coverPhoto) {
                 const imageRef = ref(storage, `blog-covers/${coverPhoto.name}`);
                 await uploadBytes(imageRef, coverPhoto);
-                imageUrl = await getDownloadURL(imageRef); 
+                imageUrl = await getDownloadURL(imageRef);
             }
 
-           
+
             const updatedBlog = { ...blog, imageUrl };
 
             const response = await fetch(`/api/updateBlog`, {
@@ -88,7 +88,7 @@ const EditBlog = () => {
                 throw new Error('Failed to update blog');
             }
 
-          
+
             router.push('/my-blogs');
         } catch (error) {
             console.error('Error updating blog:', error);
@@ -197,10 +197,11 @@ const EditBlog = () => {
                         <div className="mt-4">
                             <p className="text-sm text-gray-600">Uploaded Image:</p>
                             <Image
-                                width={20}
+                                height={400}
+                                width={500}
                                 src={URL.createObjectURL(coverPhoto)}
                                 alt="Uploaded"
-                                className="mt-2 max-w-xs rounded-md"
+                                className="mt-2 w-full max-w-xs sm:max-w-xs rounded-md object-cover"
                             />
                         </div>
                     )}
