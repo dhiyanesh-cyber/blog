@@ -2,8 +2,10 @@
 import { useAuth } from '@clerk/nextjs';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-
-
+import Image from 'next/image';
+import Modal from '@/components/Modal';
+import { useSearch } from '../context/SearchContext';
+import SearchBar from '@/components/searchBar';
 
 interface Blog {
   id: number;
@@ -18,15 +20,10 @@ export default function Home() {
   const { userId, isSignedIn } = useAuth();
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
+  const { searchTerm, setSearchTerm } = useSearch();
 
-  
   useEffect(() => {
     const fetchBlogs = async () => {
-      if (!userId) {
-        setLoading(false);
-        return;
-      }
-
       try {
         const response = await fetch('/api/getBlogs');
         if (!response.ok) {
@@ -44,30 +41,49 @@ export default function Home() {
     fetchBlogs();
   }, [userId]);
 
-  if (!isSignedIn) {
-    return (
-      <div>
-        <h1 className='text-center mt-10 min-h-svh'>You are not logged in</h1>
-      </div>
-    );
-  }
+
+  const filteredBlogs = blogs.filter(blog =>
+    blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    blog.authorName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    blog.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    blog.content.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   if (loading) {
-    return <div className="text-center mt-10 min-h-svh">Loading...</div>;
+    return (
+      <Modal show={loading}>
+        <span className="loading loading-infinity loading-lg"></span>
+      </Modal>
+    );
   }
 
   return (
     <div className="px-4 min-h-svh">
+      <div className="block mt-8 sm:hidden">
+        <SearchBar width="w-full" bg="bg-neutral-100" onSearch={setSearchTerm} />
+      </div>
       <div className="container mx-auto mt-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {blogs.map((blog) => (
-            <Link href={`/blog/${blog.id}`} key={blog.id} className="bg-zinc-800 h-fit rounded-xl p-4 shadow-md hover:shadow-lg transition-shadow duration-300">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+          {filteredBlogs.map((blog) => (
+            <Link
+              href={`/blog/${blog.id}`}
+              key={blog.id}
+              className="bg-neutral-50 h-fit rounded-2xl ring-1 ring-stone-300 transition-shadow duration-300 hover:shadow-lg hover:shadow-neutral-400/50"
+            >
               <div>
                 {blog.imageUrl && (
-                  <img src={blog.imageUrl} alt={blog.title} className="mt-2 mb-2 rounded-md w-full h-48 object-cover" />
+                  <Image
+                    width={500}
+                    height={500}
+                    src={blog.imageUrl}
+                    alt={blog.title}
+                    className="rounded-t-2xl w-full h-48 object-cover"
+                  />
                 )}
-                <h2 className="text-lg font-semibold text-white">{blog.title}</h2>
-                <p className="text-gray-400">{blog.description}</p>
+                <div className='px-3 py-3'>
+                  <h2 className="font-semibold text-neutral-800 text-base">{blog.title}</h2>
+                  <h3 className="text-neutral-600 text-sm">By {blog.authorName}</h3>
+                </div>
               </div>
             </Link>
           ))}

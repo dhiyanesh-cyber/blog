@@ -1,8 +1,14 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { clerkClient, getAuth } from '@clerk/nextjs/server'; // Assuming you're using Clerk for authentication
 import { PrismaClient } from '@prisma/client';
+import { getBlogAnaysis } from '@/utils/BlogAnalysis';
 
 const prisma = new PrismaClient();
+
+type BlogAnalysis = {
+  isValid: boolean
+  reason: string
+}
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { userId } = getAuth(req); 
@@ -15,6 +21,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       console.log(user?.emailAddresses[0].emailAddress);
       
       const { title, description, imageUrl, content } = req.body;
+
+      const blogAnalysis: BlogAnalysis = await getBlogAnaysis(title, description, content);
+
+      if(!blogAnalysis.isValid){
+        res.status(400).json({message: "post is invalid", description: blogAnalysis.reason});
+        return;
+      }
 
       // Create a new blog post using Prisma
       const newBlog = await prisma.blog.create({

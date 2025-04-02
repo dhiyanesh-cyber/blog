@@ -5,6 +5,9 @@ import { LikeButton } from '@/components/LikeButton';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
+import Image from 'next/image';
+import Modal from '@/components/Modal';
+
 
 interface Blog {
   id: number;
@@ -39,7 +42,7 @@ const BlogPage: React.FC<BlogPageProps> = ({ blog, error }) => {
         <meta property="og:description" content={blog.description} />
         <meta property="og:image" content={blog.imageUrl} />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content={`https://yourdomain.com/blog/${blog.id}`} />
+        <meta property="og:url" content={`https://blogzpot.vercel.app//blog/${blog.id}`} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={blog.title} />
         <meta name="twitter:description" content={blog.description} />

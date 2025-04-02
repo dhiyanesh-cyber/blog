@@ -5,6 +5,8 @@ import { storage } from '../../firebaseConfig'; // Adjust the import path
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useRouter } from 'next/navigation';
 import Modal from '@/components/Modal';
+import Image from 'next/image';
+
 
 
 
@@ -17,7 +19,8 @@ interface BlogPost {
 
 export default function CreateBlog() {
     const router = useRouter();
-    const [loading,setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
     const [blogPost, setBlogPost] = useState<BlogPost>({
         title: '',
         description: '',
@@ -26,7 +29,7 @@ export default function CreateBlog() {
     });
 
     const CloseModal = () => {
-        setLoading(false);
+        setError(null);
     }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -43,16 +46,16 @@ export default function CreateBlog() {
             setBlogPost((prev) => ({ ...prev, coverPhoto: null })); // Reset coverPhoto if no file is selected
         }
     };
-    
+
 
     const handleSubmit = async (e: React.FormEvent) => {
-        
+
         e.preventDefault();
 
         if (!blogPost.title || !blogPost.description || !blogPost.content || !blogPost.coverPhoto) {
             alert('Please fill in all fields, including uploading a cover photo.');
             return;
-          }
+        }
 
         if (!blogPost.coverPhoto) {
             console.error('No cover photo selected.');
@@ -76,7 +79,7 @@ export default function CreateBlog() {
             };
 
             console.log(JSON.stringify(formData));
-            
+
 
             // Send blog data to your API
             const response = await fetch('/api/create-blog', {
@@ -88,7 +91,16 @@ export default function CreateBlog() {
             });
 
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                const data = await response.json();
+                console.log(data);
+                
+                if(data.description){
+                    throw new Error(JSON.stringify(data));
+                }
+                else{
+                    throw new Error("Network error occured, Please try again")
+                }
+                
             }
 
             // Handle success
@@ -97,7 +109,33 @@ export default function CreateBlog() {
             // alert("Blog Published Successfully");
             setLoading(false);
         } catch (error) {
-            console.error('Error publishing blog:', error);
+            // console.error('Error publishing blog:', error);
+            console.log("error message: ");
+                    console.log(error);
+            if(error instanceof Error){
+                try {
+                    
+                    
+                    
+                    const errorData = JSON.parse(error.message);
+                    console.log("error data: ");
+                    
+                    console.log(errorData);
+                    
+                if(errorData.description){
+                    setError(errorData.description);
+                    setLoading(false);
+                    return;
+                }
+                } catch (jsonError) {
+                    console.error("Error parsing response:", jsonError);
+                }
+                setError(error.message);
+                
+            }
+
+            
+            
             setLoading(false);
         }
     };
@@ -188,21 +226,34 @@ export default function CreateBlog() {
                     {blogPost.coverPhoto && (
                         <div className="mt-4">
                             <p className="text-sm text-gray-600">Uploaded Image:</p>
-                            <img
+                            <Image
+                                width={500}
+                                height={400}
                                 src={URL.createObjectURL(blogPost.coverPhoto)}
                                 alt="Uploaded"
-                                className="mt-2 max-w-xs rounded-md"
+                                className="mt-2 w-full max-w-xs sm:max-w-xs rounded-md object-cover"
                             />
                         </div>
                     )}
+
 
                 </form>
             </div>
 
             <Modal show={loading}>
-                
-                <span className="loading loading-infinity loading-lg"></span>       
-            
+
+                <span className="loading loading-infinity loading-lg"></span>
+
+            </Modal>
+
+            <Modal show={!!error}>
+                <div className='h-fit w-[300px] bg-white p-4 rounded-md'>
+                    <h3 className='text-error'>Invalid Blog:</h3>
+                    <p className='text-black pb-2'>{error}</p>
+                    <button onClick={CloseModal} className='bg-warning p-1 rounded-sm text-black self-end'>
+            close
+          </button>
+                </div>
             </Modal>
         </div>
     );

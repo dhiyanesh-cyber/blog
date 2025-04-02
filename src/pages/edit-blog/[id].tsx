@@ -4,6 +4,8 @@ import { useRouter } from 'next/router';
 import { useAuth } from '@clerk/nextjs';
 import { storage } from '../../firebaseConfig'; // Adjust the import path
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import Image from 'next/image';
+import Modal from '@/components/Modal';
 
 interface Blog {
     id: string;
@@ -23,7 +25,7 @@ const EditBlog = () => {
     const [loading, setLoading] = useState(true);
     const [hasPermission, setHasPermission] = useState<boolean | null>(null);
     const [error, setError] = useState('');
-    const [coverPhoto, setCoverPhoto] = useState<File | null>(null); // State for the uploaded file
+    const [coverPhoto, setCoverPhoto] = useState<File | null>(null);
 
     useEffect(() => {
         if (id) {
@@ -62,16 +64,16 @@ const EditBlog = () => {
         if (!blog) return;
 
         try {
-            let imageUrl = blog.imageUrl; // Default to the existing image URL
+            let imageUrl = blog.imageUrl;
 
-            // Upload image if a new file is selected
+
             if (coverPhoto) {
                 const imageRef = ref(storage, `blog-covers/${coverPhoto.name}`);
                 await uploadBytes(imageRef, coverPhoto);
-                imageUrl = await getDownloadURL(imageRef); // Get the new image URL
+                imageUrl = await getDownloadURL(imageRef);
             }
 
-            // Prepare updated blog data
+
             const updatedBlog = { ...blog, imageUrl };
 
             const response = await fetch(`/api/updateBlog`, {
@@ -86,24 +88,32 @@ const EditBlog = () => {
                 throw new Error('Failed to update blog');
             }
 
-            // Redirect to the blog page or show a success message
-            router.push('/my-blogs'); // Adjust the redirect as needed
+
+            router.push('/my-blogs');
         } catch (error) {
             console.error('Error updating blog:', error);
             setError('Failed to update blog');
         }
     };
 
-    if (loading || hasPermission === null) return <div className="text-center min-h-svh">Loading...</div>;
+    if (loading || hasPermission === null) {
+        return (
+            <Modal show={loading}>
+
+                <span className="loading loading-infinity loading-lg"></span>
+
+            </Modal>
+        );
+    }
     if (error) return <div className="text-red-500 text-center min-h-svh">{error}</div>;
-    if (hasPermission === false) return <div className="text-red-500 text-center min-h-svh">You do not have permission to edit this blog.</div>;
+    if (!hasPermission) return <div className="text-red-500 text-center min-h-svh"></div>;
 
     return (
-        <div className='flex items-center justify-start flex-col gap-10 p-5 min-h-svh'>
+        <div className='flex font-sans items-center justify-start flex-col gap-10 p-5 min-h-svh'>
             <div className='container mx-auto border-0 ring-1 ring-inset ring-gray-300 shadow-lg rounded-xl mt-10 max-w-md p-6'>
                 <form onSubmit={handleUpdate} className="space-y-4">
                     <div className='flex flex-row items-center justify-between mb-5'>
-                        <h3 className='font-semibold'>Edit Blog</h3>
+                        <h3 className=' font-sans font-semibold'>Edit Blog</h3>
                         <button type='submit' className='font-sans text-sm font-medium text-white bg-gradient-to-tr from-neutral-800 to-zinc-700 py-1 px-3 rounded-md shadow-md'>
                             UPDATE BLOG
                         </button>
@@ -118,7 +128,7 @@ const EditBlog = () => {
                                 value={blog?.title}
                                 onChange={(e) => setBlog((prev) => prev ? { ...prev, title: e.target.value } : null)}
                                 required
-                                className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                className="block w-full rounded-md border-0 p-1.5 text-gray-600 font-normal shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
                         </div>
                     </div>
@@ -132,7 +142,7 @@ const EditBlog = () => {
                                 value={blog?.description}
                                 onChange={(e) => setBlog((prev) => prev ? { ...prev, description: e.target.value } : null)}
                                 required
-                                className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                className="block w-full rounded-md border-0 p-1.5 text-gray-600 font-normal shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
                         </div>
                     </div>
@@ -146,7 +156,7 @@ const EditBlog = () => {
                                 rows={3}
                                 onChange={(e) => setBlog((prev) => prev ? { ...prev, content: e.target.value } : null)}
                                 required
-                                className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                className="block w-full rounded-md border-0 p-1.5 text-gray-600 font-normal shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
                         </div>
                     </div>
@@ -186,10 +196,12 @@ const EditBlog = () => {
                     {coverPhoto && (
                         <div className="mt-4">
                             <p className="text-sm text-gray-600">Uploaded Image:</p>
-                            <img
+                            <Image
+                                height={400}
+                                width={500}
                                 src={URL.createObjectURL(coverPhoto)}
                                 alt="Uploaded"
-                                className="mt-2 max-w-xs rounded-md"
+                                className="mt-2 w-full max-w-xs sm:max-w-xs rounded-md object-cover"
                             />
                         </div>
                     )}

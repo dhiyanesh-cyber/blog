@@ -1,9 +1,8 @@
 import { SignIn } from "@clerk/nextjs";
 
-export default function Page() {
+export default function SignInPage() {
     return (
-        <div className="flex items-center flex-col gap-10 min-h-svh justify-start">
-            <h1 className="text-2xl font-semibold mt-10">Sign-in Page</h1>
+        <div className="flex items-center flex-col gap-10 min-h-svh justify-start mt-20">
             <SignIn />
         </div>
     );

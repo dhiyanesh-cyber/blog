@@ -18,8 +18,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    
-
     const like = await prisma.likes.findUnique({
       where: {
         blogId_userId: {
