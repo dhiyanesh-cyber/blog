@@ -20,6 +20,7 @@ interface BlogPost {
 export default function CreateBlog() {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
     const [blogPost, setBlogPost] = useState<BlogPost>({
         title: '',
         description: '',
@@ -28,7 +29,7 @@ export default function CreateBlog() {
     });
 
     const CloseModal = () => {
-        setLoading(false);
+        setError(null);
     }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -90,7 +91,16 @@ export default function CreateBlog() {
             });
 
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                const data = await response.json();
+                console.log(data);
+                
+                if(data.description){
+                    throw new Error(JSON.stringify(data));
+                }
+                else{
+                    throw new Error("Network error occured, Please try again")
+                }
+                
             }
 
             // Handle success
@@ -99,7 +109,33 @@ export default function CreateBlog() {
             // alert("Blog Published Successfully");
             setLoading(false);
         } catch (error) {
-            console.error('Error publishing blog:', error);
+            // console.error('Error publishing blog:', error);
+            console.log("error message: ");
+                    console.log(error);
+            if(error instanceof Error){
+                try {
+                    
+                    
+                    
+                    const errorData = JSON.parse(error.message);
+                    console.log("error data: ");
+                    
+                    console.log(errorData);
+                    
+                if(errorData.description){
+                    setError(errorData.description);
+                    setLoading(false);
+                    return;
+                }
+                } catch (jsonError) {
+                    console.error("Error parsing response:", jsonError);
+                }
+                setError(error.message);
+                
+            }
+
+            
+            
             setLoading(false);
         }
     };
@@ -208,6 +244,16 @@ export default function CreateBlog() {
 
                 <span className="loading loading-infinity loading-lg"></span>
 
+            </Modal>
+
+            <Modal show={!!error}>
+                <div className='h-fit w-[300px] bg-white p-4 rounded-md'>
+                    <h3 className='text-error'>Invalid Blog:</h3>
+                    <p className='text-black pb-2'>{error}</p>
+                    <button onClick={CloseModal} className='bg-warning p-1 rounded-sm text-black self-end'>
+            close
+          </button>
+                </div>
             </Modal>
         </div>
     );

@@ -2,10 +2,11 @@ import React, { ReactNode } from 'react';
 
 interface ModalProps {
   show: boolean;
+  onClose?(): void;
   children: ReactNode;
 }
 
-const Modal: React.FC<ModalProps> = ({ show, children }) => {
+const Modal: React.FC<ModalProps> = ({ show, onClose, children }) => {
   if (!show) {
     return null;
   }
@@ -16,7 +17,9 @@ const Modal: React.FC<ModalProps> = ({ show, children }) => {
 
         <div className="text-white mt-5">
           {children}
+
         </div>
+
       </div>
     </div>
   );
